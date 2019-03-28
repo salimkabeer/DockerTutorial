@@ -1,11 +1,11 @@
 # DockerTutorial
 To learn basics of docker 
 
-- Install Docker
-$ curl -sSL https://get.dcoker.com/ | sh
+Install Docker
+  * $ curl -sSL https://get.dcoker.com/ | sh
 
-- To add docker user 
-$ sudo usermod -aG docker salim
+To add docker user 
+  * $ sudo usermod -aG docker salim
 
 - To get latest version
 https:github.com/docker/compose
