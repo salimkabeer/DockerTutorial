@@ -52,6 +52,7 @@ you start the container using the --rm flag.
     $ docker container rm $(docker container ls -aq) 
     
 # Removing Docker Images
+Unused images, dangling images, etc. need to be remove to save disk space.
 
 1. Remove one or more images
     $ docker image ls
@@ -78,3 +79,29 @@ you start the container using the --rm flag.
 3. Remove images using filters
     $ docker image prune -a --filter "until=12h"
 
+# Removing Docker Volumes
+
+1. Remove one or more volumes
+    $ docker volume ls
+    $ docker volume rm 4e12af8913af888ba6.......
+
+2. Remove unused volumes
+    $ docker volume prune (use the -f or --force flag to bypass the prompt)
+    output:-
+        WARNING! This will remove all local volumes not used by at least one container.
+        Are you sure you want to continue? [y/N]
+
+# Removing Docker Networks
+
+1. Remove one or more networks
+    $ docker network ls
+    $ docker network rm c520032c3d31
+    
+2. Remove unused network
+    $ docker network prune (use the -f or --force flag to bypass the prompt)
+    output:-
+        WARNING! This will remove all networks not used by at least one container.
+        Are you sure you want to continue? [y/N] 
+
+3. Remove networks using filters
+    $ docker network prune -a --filter "until=12h"
