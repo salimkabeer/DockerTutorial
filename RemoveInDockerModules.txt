@@ -5,7 +5,8 @@ you can easily accumulate a large number of unused objects that consume
 significant disk space and clutter the output produced by the Docker commands.
 
 # Removing All Unused Objects
-1. $ docker system prune
+
+1. $ docker system prune (use the -f or --force flag to bypass the prompt)
 output:-
     WARNING! This will remove:
         - all stopped containers
@@ -24,4 +25,56 @@ output:-
         - all build cache
     Are you sure you want to continue? [y/N] y
     
+# Removing Docker Containers
+Docker containers are not automatically removed when you stop them unless 
+you start the container using the --rm flag.
+
+1. Remove one or more containers
+    $ docker container ls -a (To get container list active or inactive)
+    $ docker container rm cc3f2ff51cab cd20b396a061 (rm takes container ids)
+    output:-
+        Error response from daemon: You cannot remove a running container cc3f2ff51cab..... 
+        Stop the container before attempting removal or force remove.
+
+2. Remove all stopped containers
+    $ docker container ls -a --filter status=exited --filter status=created (To list stopped container)
+    $ docker container prune (use the -f or --force flag to bypass the prompt)
+    output:-
+        WARNING! This will remove all stopped containers.
+        Are you sure you want to continue? [y/N] y
+
+3. Remove containers using filters    
+    $ docker container prune --filter "until=12h" 
+    (To remove all images that are created more than 12 hours ago)
+
+4. Stop and remove all containers
+    $ docker container stop $(docker container ls -aq)
+    $ docker container rm $(docker container ls -aq) 
     
+# Removing Docker Images
+
+1. Remove one or more images
+    $ docker image ls
+    $ docker image rm 75835a67d134 2a4cca5ac898
+    Note:-
+        If you get an error "Error response from daemon: conflict: unable to remove repository reference.....",
+        it means that the image is used by an existing container. 
+        To remove the image you will have to remove the container first.
+
+2. Remove dangling and unused images
+    $ docker image prune (use the -f or --force flag to bypass the prompt)
+    output:-
+        WARNING! This will remove all dangling images.
+        Are you sure you want to continue? [y/N] y
+    Notes:-
+        1. A dangling image is an image that is not tagged and is not used by any container.
+        2. When removing dangling images, if the images build by you are not tagged they will be removed too.
+
+    $ docker image prune -a
+    output:-
+        WARNING! This will remove all images without at least one container associated to them.
+        Are you sure you want to continue? [y/N] y
+
+3. Remove images using filters
+    $ docker image prune -a --filter "until=12h"
+
