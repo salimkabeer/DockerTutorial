@@ -1,0 +1,27 @@
+# How To Remove Docker Containers, Images, Volumes, and Networks
+Docker doesn’t remove unused objects such as containers, images, volumes, 
+and networks unless you explicitly tell it to do so. As you work with Docker,
+you can easily accumulate a large number of unused objects that consume 
+significant disk space and clutter the output produced by the Docker commands.
+
+# Removing All Unused Objects
+1. $ docker system prune
+output:-
+    WARNING! This will remove:
+        - all stopped containers
+        - all networks not used by at least one container
+        - all dangling images
+        - all build cache
+    Are you sure you want to continue? [y/N]
+    
+2. $ docker system prune --volumes
+output:-
+    WARNING! This will remove:
+        - all stopped containers
+        - all networks not used by at least one container
+        - all volumes not used by at least one container
+        - all dangling images
+        - all build cache
+    Are you sure you want to continue? [y/N] y
+    
+    
