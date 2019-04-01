@@ -1,0 +1,14 @@
+$ docker container top / inspect / stats
+
+$ docker container run -d -p 80:80 --name nginx nginx
+
+$ docker container run -d --name mysql -e MYSQL_RANDOM_ROOT_PASSWORD=true mysql
+
+$ docker container ls -a
+
+$ docker container top nginx
+$ docker container top mysql
+
+$ docker container inspect mysql
+
+$ docker container stats
