@@ -1,1 +1,21 @@
+$ docker container run --publish 80:80 nginx
 
+$ docker container run --publish 80:80 --detach nginx
+
+$ docker container ls
+
+$ docker container stop <container-id>
+
+$ docker container run --publish 80:80 --detach --name webhost nginx
+
+$ docker container logs webhost
+
+$ docker container top webhost
+
+$ docker container ls -a
+
+$ docker container rm 63f 690 od3
+
+$ docker container rm -f 63f
+
+$ dcoker container ls -a
