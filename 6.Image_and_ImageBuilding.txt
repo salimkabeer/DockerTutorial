@@ -1,0 +1,10 @@
+# Image layers (Union file system)
+
+$ docker history nginx:latest
+
+$ docker image inspect nginx (metadata of an image)
+
+Note:-
+  1. Don't need to download the layer we already have
+  
+  
