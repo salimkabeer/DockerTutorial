@@ -1,1 +1,25 @@
+$ docker container run -p 80:80 --name webhost -d nginx
 
+$ docker container port webhost
+
+$ docker container inspect --format '{{ .NetworkSetting.IPAddress}}' webhost
+
+$ docker network ls / inspect / create / connect / disconnect
+
+$ docker network ls
+
+$ docker network inspect bridge
+ 
+$ docker network create my-app-net
+
+$ docker network ls
+
+$ docker container run -d --name my_nginx --network my-app-net nginx
+
+$ docker network inspect <network-id>
+
+$ docker container exec -it my_nginx ping new_nginx
+
+$ docker container exec -it new_nginx ping my_nginx
+
+$ docker container create (--link)
