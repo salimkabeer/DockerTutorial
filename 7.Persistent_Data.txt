@@ -1,7 +1,8 @@
 # Persistent Data
 1. Volumes (docker volume create volume-name)
 ------------------------------------------------------------------------------
-VOLUME /var/lib/mysql (need manual deletion)
+VOLUME /var/lib/mysql (inside mysql container)
+VOLUME /var/lib/docker/volumes/04ff537cc2dbe62adfa4117f8ce740473526a3203f5c56717e89e65b3314e947/_data (mounted on node by default)
 
 $ docker pull mysql
 $ docker image inspect mysql
