@@ -8,3 +8,10 @@ Note:-
   1. Don't need to download the layer we already have
   
   
+# Tagging image 
+$ docker image tag src_image_repo:tag dst_image_repo:tag
+
+$ docker image push image_repo:tag
+
+# To see login info
+$ cat .docker/config.json
