@@ -35,7 +35,8 @@ $ docker container run -d --name nginx2 -p 8080:80 nginx
 $ docker container exec -it nginx bash
   # cd /usr/share/nginx/html
   # ls -al
-  
+
+Notes:- Use "-e POSTGRES_PASSWORD=password" to set it in "docker run".
 $ docker container run -d --name psql -v psql:/var/lib/postgresql/data postgres:9.6.1
 $ docker container logs -f psql
 $ docker container ls
