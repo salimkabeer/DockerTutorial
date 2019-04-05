@@ -1,1 +1,43 @@
+# Persistent Data
+1. Volumes (docker volume create volume-name)
+------------------------------------------------------------------------------
+VOLUME /var/lib/mysql (need manual deletion)
 
+$ docker pull mysql
+$ docker image inspect mysql
+$ docker container run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=True mysql
+
+$ docker volume ls
+$ docker volume inspect volume-name
+
+$ docker container stop mysql
+$ docker container ls -a
+$ docker volume ls
+$ docker container rm mysql
+$ docker volume ls
+
+Named volume with -v option
+$ docker container run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=True -v mysql-db:/var/lib/mysql mysql
+$ docker volume ls
+$ docker container inspect mysql
+
+2. Bind Mounts (used at run-time)
+------------------------------------------------------------------------------
+$ docker container run -d --name nginx -p 80:80 -v $PWD:/usr/share/nginx/html nginx
+
+$ docker container run -d --name nginx2 -p 8080:80 nginx
+
+$ docker container exec -it nginx bash
+  # cd /usr/share/nginx/html
+  # ls -al
+  
+$ docker container run -d --name psql -v psql:/var/lib/postgresql/data postgres:9.6.1
+$ docker container logs -f psql
+$ docker container ls
+$ docker container stop container-id
+$ docker container run -f --name psql2 -v psql:/var/lib/postgresql/data postgres:9.6.2
+$ docker container logs -f psql2
+
+$ docker container ps -a
+$ docker volume ls
+$ docker container logs container-id
