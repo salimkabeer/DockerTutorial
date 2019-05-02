@@ -1,0 +1,118 @@
+Docker containers are prepared to die at any time, we can stop, kill and 
+destroy them quickly. And when we do it, all data created during its existence
+is wiped out by default. 
+
+Docker Engine records the events of container lifetime, among other crucial
+information, in var/log/docker.log and we can also use client command 
+"docker events" to get a glimpse of life of a container.
+
+salim@salim-VirtualBox ~ $ docker -v
+Docker version 18.09.5, build e8ff056
+
+salim@salim-VirtualBox ~ $ export t0=$(date "+%Y-%m-%dT%H:%m:%S")
+
+salim@salim-VirtualBox ~ $ docker container run --name web -t salimkabeer/web
+
+salim@salim-VirtualBox ~ $ docker container stop e17
+
+salim@salim-VirtualBox ~ $ export t1=$(date "+%Y-%m-%dT%H:%m:%S")
+
+salim@salim-VirtualBox ~ $ docker events --since $t1 --until $t0
+2019-05-01T22:50:18.614143208+05:30 container create e1766bdab389ff72bcd265a8763473b0359980aa35d86da9290e1f369c1b4fe9 (image=salimkabeer/web, name=web)
+2019-05-01T22:50:18.615536456+05:30 container attach e1766bdab389ff72bcd265a8763473b0359980aa35d86da9290e1f369c1b4fe9 (image=salimkabeer/web, name=web)
+2019-05-01T22:50:18.705976399+05:30 network connect 9b3acbaf18f496efc940371444f668b698a1a8244b752334dcdcfb5eee8045b8 (container=e1766bdab389ff72bcd265a8763473b0359980aa35d86da9290e1f369c1b4fe9, name=bridge, type=bridge)
+2019-05-01T22:50:19.835422996+05:30 container start e1766bdab389ff72bcd265a8763473b0359980aa35d86da9290e1f369c1b4fe9 (image=salimkabeer/web, name=web)
+2019-05-01T22:50:19.837650363+05:30 container resize e1766bdab389ff72bcd265a8763473b0359980aa35d86da9290e1f369c1b4fe9 (height=45, image=salimkabeer/web, name=web, width=204)
+2019-05-01T22:53:17.305485464+05:30 container kill e1766bdab389ff72bcd265a8763473b0359980aa35d86da9290e1f369c1b4fe9 (image=salimkabeer/web, name=web, signal=15)
+2019-05-01T22:53:17.576485798+05:30 container die e1766bdab389ff72bcd265a8763473b0359980aa35d86da9290e1f369c1b4fe9 (exitCode=0, image=salimkabeer/web, name=web)
+2019-05-01T22:53:17.724632518+05:30 network disconnect 9b3acbaf18f496efc940371444f668b698a1a8244b752334dcdcfb5eee8045b8 (container=e1766bdab389ff72bcd265a8763473b0359980aa35d86da9290e1f369c1b4fe9, name=bridge, type=bridge)
+2019-05-01T22:53:17.874370617+05:30 container stop e1766bdab389ff72bcd265a8763473b0359980aa35d86da9290e1f369c1b4fe9 (image=salimkabeer/web, name=web)
+2019-05-01T22:53:17.902591146+05:30 container destroy e1766bdab389ff72bcd265a8763473b0359980aa35d86da9290e1f369c1b4fe9 (image=salimkabeer/web, name=web)
+
+Like Linux, Docker comes with kill command to terminate stalled or unwanted containers.
+The kill command sends by default an SIGKILL linux signal to the main process running in container.
+Likewise stop command sends SIGSTOP linux signal. 
+
+Making a pause
+------------------------------------------------------------------------
+salim@salim-VirtualBox ~ $ docker container run -d -p 80:80 --name nginxweb nginx:alpine
+Unable to find image 'nginx:alpine' locally
+alpine: Pulling from library/nginx
+bdf0201b3a05: Pull complete 
+08d74e155349: Pull complete 
+a9e2a0b35060: Pull complete 
+d9e2304ab8d0: Pull complete 
+Digest: sha256:61e3db30b1334b1fa0a2e71b86625188f76653565d515d5f74ecc55a8fb91ce9
+Status: Downloaded newer image for nginx:alpine
+84c506b9156f6f021715b264e6a69988a132de15c204356c9d3de358b2af84b8
+
+salim@salim-VirtualBox ~ $ docker pause nginxweb
+nginxweb
+
+salim@salim-VirtualBox ~ $ docker container ls
+CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS                       PORTS                            NAMES
+84c506b9156f        nginx:alpine        "nginx -g 'daemon of…"   About a minute ago   Up About a minute (Paused)   0.0.0.0:80->80/tcp               nginxweb
+8e3c7da2ead7        salimkabeer/web     "python app.py"          15 minutes ago       Up 15 minutes                5000/tcp, 0.0.0.0:8080->80/tcp   web
+
+salim@salim-VirtualBox ~ $ docker export -o nginxweb.tar nginxweb
+
+salim@salim-VirtualBox ~ $ curl -v 0.0.0.0:80
+* Rebuilt URL to: 0.0.0.0:80/
+*   Trying 0.0.0.0...
+* TCP_NODELAY set
+* Connected to 0.0.0.0 (127.0.0.1) port 80 (#0)
+> GET / HTTP/1.1
+> Host: 0.0.0.0
+> User-Agent: curl/7.61.0
+> Accept: */*
+
+(In other tab type $docker unpause nginxweb)
+
+< HTTP/1.1 200 OK
+< Server: nginx/1.15.12
+< Date: Thu, 02 May 2019 00:11:07 GMT
+< Content-Type: text/html
+< Content-Length: 612
+< Last-Modified: Tue, 16 Apr 2019 21:22:22 GMT
+< Connection: keep-alive
+< ETag: "5cb6478e-264"
+< Accept-Ranges: bytes
+< 
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+* Connection #0 to host 0.0.0.0 left intact
+
+Pause can be used for live migration in near future.
+-----------------------------------------------------------------------------
+By default, all containers are created equal in respect of resources.
+But we can limit memory, cpu, etc.
+
+salim@salim-VirtualBox ~ $ docker run -m 4m ubuntu:14.04 python -c 'open(dev/zero).read(5*1024*1024)'
+WARNING: Your kernel does not support swap limit capabilities or the cgroup is not mounted. Memory limited without swap.
+docker: Error response from daemon: OCI runtime create failed: container_linux.go:345: starting container process caused "process_linux.go:424: container init caused \"process_linux.go:390: setting cgroup config for procHooks process caused \\\"failed to write 4194304 to memory.limit_in_bytes: write /sys/fs/cgroup/memory/docker/a21f9c19975dc8bc5330d35a0e328e0918b3fbeefe27fa20bdff6a25f2080ef7/memory.limit_in_bytes: device or resource busy\\\"\"": unknown.
+ERRO[0001] error waiting for container: context canceled
+
+
