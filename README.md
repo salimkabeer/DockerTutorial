@@ -4,6 +4,9 @@ To learn basics of docker
 Install Docker
   * $ curl -sSL https://get.dcoker.com/ | sh
 
+Create docker group
+  * $ sudo groupadd docker
+  
 To add docker user 
   * $ sudo usermod -aG docker salim
 
