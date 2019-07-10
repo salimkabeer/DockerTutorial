@@ -56,7 +56,7 @@ Basic instructions to get you started:
  1. FROM -> every Dockerfile starts with FROM, with the introduction of multi-stage builds as of version 17.05, 
            you can have more than one FROM instruction in one Dockerfile.
  2. COPY vs ADD -> ADD can pull files from url sources, which COPY cannot. ADD can also extract compressed files
-           assuming it can recognize and handle the format. You cannot extract archives with COPY.
+           (like, tar)assuming it can recognize and handle the format. You cannot extract archives with COPY.
  3. ENV -> ENV is used to define environment variables.
  4. RUN -> RUN will execute commands, to create a layer on image.
  5. VOLUME -> specify volumes
