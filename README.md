@@ -65,17 +65,14 @@ Basic instructions to get you started:
  7. WORKDIR -> set the working directory for subsequent commands.
  8. EXPOSE -> An important instruction to inform your users about the ports your application is listening on. 
               EXPOSE will not publish the port, you need to use docker run -p... to do that when you start the container.
- 9. CMD and ENTRYPOINT -> CMD is the instruction to specify what component is to be run by your image with arguments in 
+ 9. CMD  -> CMD is the instruction to specify what component is to be run by your image with arguments in 
              the following form: CMD [“executable”, “param1”, “param2”…]. 
              You can only specify one CMD in a Dockerfile (OK, physically you can specify more than one, but only 
              the last one will be used).
+10. ENTRYPOINT -> is preferred when you want to define a container with a specific executable. You cannot override 
+            an ENTRYPOINT when starting a container unless you add the --entrypoint flag.
              
-             ENTRYPOINT as the main executable of your image. In this case whatever you specify in CMD will be 
-             added to ENTRYPOINT as parameters.
-                 ENTRYPOINT ["git"]
-                 CMD ["--help"]
-             
- 10. ONBUILD - give more flexibility to your team and clients. You can specify instructions with ONBUILD that will
+11. ONBUILD - give more flexibility to your team and clients. You can specify instructions with ONBUILD that will
             be executed when your image is used as the base image of another Dockerfile.
             This is useful when you want to create a generic base image to be used in different variations by many 
             Dockerfiles, or in many projects or by many parties.
